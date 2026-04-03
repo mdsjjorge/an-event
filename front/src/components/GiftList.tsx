@@ -3,9 +3,14 @@ import { Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import GiftCard from "@/components/GiftCard";
 import QrCodeModal from "@/components/QrCodeModal";
-import { giftItems, type GiftItem } from "@/data/giftItems";
+import type { EventContent, GiftItem } from "@/types/api";
 
-const GiftList = () => {
+interface GiftListProps {
+  items: GiftItem[];
+  event: EventContent;
+}
+
+const GiftList = ({ items, event }: GiftListProps) => {
   const [selectedItem, setSelectedItem] = useState<GiftItem | null>(null);
   const [showQr, setShowQr] = useState(false);
 
@@ -25,15 +30,15 @@ const GiftList = () => {
         <div className="text-center mb-12">
           <Gift className="w-10 h-10 text-primary mx-auto mb-4" />
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-3">
-            Lista de Presentes
+            {event.giftSectionTitle}
           </h2>
           <p className="font-body text-muted-foreground max-w-md mx-auto">
-            Escolha um item para nos presentear. Ao selecionar, você receberá um QR Code Pix para pagamento.
+            {event.giftSectionDescription}
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {giftItems.map((item) => (
+          {items.map((item) => (
             <GiftCard
               key={item.id}
               item={item}
@@ -61,6 +66,9 @@ const GiftList = () => {
         open={showQr}
         onClose={() => setShowQr(false)}
         item={selectedItem}
+        pixCity={event.pixCity}
+        pixKey={event.pixKey}
+        supportPhone={event.supportPhone}
       />
     </section>
   );

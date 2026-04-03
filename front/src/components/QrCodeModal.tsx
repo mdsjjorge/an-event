@@ -6,19 +6,33 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import type { GiftItem } from "@/data/giftItems";
+import type { GiftItem } from "@/types/api";
 
 interface QrCodeModalProps {
   open: boolean;
   onClose: () => void;
   item: GiftItem | null;
+  pixKey: string;
+  pixCity: string;
+  supportPhone: string;
 }
 
-const QrCodeModal = ({ open, onClose, item }: QrCodeModalProps) => {
+const QrCodeModal = ({
+  open,
+  onClose,
+  item,
+  pixKey,
+  pixCity,
+  supportPhone,
+}: QrCodeModalProps) => {
   if (!item) return null;
 
-  // Generate a Pix-like payload string (placeholder — replace with real Pix key)
-  const pixPayload = `00020126580014BR.GOV.BCB.PIX0136SUA-CHAVE-PIX-AQUI5204000053039865404${item.price.toFixed(2)}5802BR6009SAO PAULO62070503***6304`;
+  const pixPayload = `00020126580014BR.GOV.BCB.PIX01${String(
+    pixKey.length + 4
+  ).padStart(2, "0")}${pixKey}5204000053039865404${item.price
+    .toFixed(2)
+    .padStart(6, "0")}5802BR60${String(pixCity.length)
+    .padStart(2, "0")}${pixCity}62070503***6304`;
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -51,7 +65,7 @@ const QrCodeModal = ({ open, onClose, item }: QrCodeModalProps) => {
             </p>
           </div>
           <p className="font-body text-xs text-muted-foreground text-center max-w-xs">
-            Após o pagamento, envie o comprovante pelo WhatsApp para confirmarmos o presente.
+            Apos o pagamento, envie o comprovante pelo WhatsApp para confirmarmos o presente: {supportPhone}
           </p>
         </div>
       </DialogContent>

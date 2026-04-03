@@ -11,20 +11,41 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { createRsvp } from "@/lib/api";
+import type { EventContent } from "@/types/api";
 
-const RsvpSection = () => {
+interface RsvpSectionProps {
+  event: EventContent;
+}
+
+const RsvpSection = ({ event }: RsvpSectionProps) => {
   const [name, setName] = useState("");
   const [guests, setGuests] = useState("");
   const [confirmed, setConfirmed] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
       toast.error("Por favor, informe seu nome.");
       return;
     }
-    setConfirmed(true);
-    toast.success("Presença confirmada! Obrigado 💚");
+
+    try {
+      setIsSubmitting(true);
+      const guestsCount = guests ? Number(guests) : 0;
+      const response = await createRsvp({ name, guests: guestsCount });
+      setConfirmed(true);
+      toast.success(response.message);
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Nao foi possivel confirmar sua presenca."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -33,10 +54,10 @@ const RsvpSection = () => {
         <div className="text-center mb-10">
           <CalendarHeart className="w-10 h-10 text-primary mx-auto mb-4" />
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-3">
-            Confirmar Presença
+            {event.rsvpTitle}
           </h2>
           <p className="font-body text-muted-foreground">
-            Confirme sua presença para que possamos preparar tudo com carinho.
+            {event.rsvpDescription}
           </p>
         </div>
 
@@ -47,7 +68,7 @@ const RsvpSection = () => {
               Presença Confirmada!
             </h3>
             <p className="font-body text-muted-foreground">
-              Obrigado, <strong className="text-foreground">{name}</strong>! Estamos ansiosos para celebrar com você.
+              Obrigado, <strong className="text-foreground">{name}</strong>! Estamos ansiosos para celebrar com voce.
             </p>
           </div>
         ) : (
@@ -86,10 +107,11 @@ const RsvpSection = () => {
             <Button
               type="submit"
               size="lg"
+              disabled={isSubmitting}
               className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-body text-base py-6 rounded-full gap-2"
             >
               <Send className="w-5 h-5" />
-              Confirmar Presença
+              {isSubmitting ? "Enviando..." : "Confirmar Presenca"}
             </Button>
           </form>
         )}
