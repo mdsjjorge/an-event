@@ -66,8 +66,6 @@ const GiftList = ({ items, event }: GiftListProps) => {
         open={showQr}
         onClose={() => setShowQr(false)}
         item={selectedItem}
-        pixCity={event.pixCity}
-        pixKey={event.pixKey}
         supportPhone={event.supportPhone}
       />
     </section>

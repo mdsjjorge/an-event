@@ -11,8 +11,6 @@ const eventSchema = new Schema(
     rsvpTitle: { type: String, required: true },
     rsvpDescription: { type: String, required: true },
     footerText: { type: String, required: true },
-    pixKey: { type: String, required: true },
-    pixCity: { type: String, required: true },
     supportPhone: { type: String, required: true },
   },
   { timestamps: true }

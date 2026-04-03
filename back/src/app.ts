@@ -4,6 +4,7 @@ import morgan from "morgan";
 import { env } from "./config/env.js";
 import { eventRouter } from "./routes/eventRoutes.js";
 import { giftRouter } from "./routes/giftRoutes.js";
+import { paymentRouter } from "./routes/paymentRoutes.js";
 import { rsvpRouter } from "./routes/rsvpRoutes.js";
 
 export const app = express();
@@ -22,4 +23,5 @@ app.get("/api/health", (_req, res) => {
 
 app.use("/api/event", eventRouter);
 app.use("/api/gifts", giftRouter);
+app.use("/api/payments", paymentRouter);
 app.use("/api/rsvps", rsvpRouter);

@@ -20,8 +20,6 @@ eventRouter.get("/", async (_req, res) => {
     rsvpTitle: event.rsvpTitle,
     rsvpDescription: event.rsvpDescription,
     footerText: event.footerText,
-    pixKey: event.pixKey,
-    pixCity: event.pixCity,
     supportPhone: event.supportPhone,
   });
 });

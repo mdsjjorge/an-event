@@ -11,8 +11,6 @@ export const defaultEvent = {
   rsvpDescription:
     "Confirme sua presenca para que possamos preparar tudo com carinho.",
   footerText: "Feito com amor para nosso grande dia",
-  pixKey: "SUA-CHAVE-PIX-AQUI",
-  pixCity: "SAO PAULO",
   supportPhone: "5511999999999",
 };
 

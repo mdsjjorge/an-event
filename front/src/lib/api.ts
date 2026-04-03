@@ -1,4 +1,10 @@
-import type { EventContent, GiftItem, RsvpPayload } from "@/types/api";
+import type {
+  EventContent,
+  GiftItem,
+  PixPaymentPayload,
+  PixPaymentResponse,
+  RsvpPayload,
+} from "@/types/api";
 
 const apiBaseUrl = import.meta.env.VITE_API_URL ?? "/api";
 
@@ -28,6 +34,12 @@ export const getGiftItems = () => request<GiftItem[]>("/gifts");
 
 export const createRsvp = (payload: RsvpPayload) =>
   request<{ message: string }>("/rsvps", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+export const createPixPayment = (payload: PixPaymentPayload) =>
+  request<PixPaymentResponse>("/payments/pix", {
     method: "POST",
     body: JSON.stringify(payload),
   });

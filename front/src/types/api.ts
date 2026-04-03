@@ -8,8 +8,6 @@ export interface EventContent {
   rsvpTitle: string;
   rsvpDescription: string;
   footerText: string;
-  pixKey: string;
-  pixCity: string;
   supportPhone: string;
 }
 
@@ -24,4 +22,25 @@ export interface GiftItem {
 export interface RsvpPayload {
   name: string;
   guests: number;
+}
+
+export interface PixPaymentPayload {
+  transactionAmount: number;
+  description: string;
+  payer: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    identificationType: "CPF";
+    identificationNumber: string;
+  };
+}
+
+export interface PixPaymentResponse {
+  id: string;
+  status: string | null;
+  statusDetail: string | null;
+  qrCode: string;
+  qrCodeBase64: string;
+  ticketUrl: string;
 }
