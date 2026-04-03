@@ -25,22 +25,34 @@ export interface RsvpPayload {
 }
 
 export interface PixPaymentPayload {
-  transactionAmount: number;
-  description: string;
-  payer: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    identificationType: "CPF";
-    identificationNumber: string;
-  };
+  giftId: string;
 }
 
 export interface PixPaymentResponse {
   id: string;
-  status: string | null;
-  statusDetail: string | null;
-  qrCode: string;
-  qrCodeBase64: string;
-  ticketUrl: string;
+  externalReference: string;
+  idempotencyKey: string;
+  status: string;
+  statusDetail: string;
+  totalAmount: string;
+  qrMode: "static" | "dynamic" | "hybrid";
+  qrData: string | null;
+  usesStaticPosQr: boolean;
+  staticQrConfigured: boolean;
+  instructions: string;
+  ticketUrl: string | null;
+  payment: {
+    id: string;
+    amount: string;
+    status: string;
+    statusDetail: string;
+  };
+  store: {
+    id: number;
+    externalStoreId: string;
+    externalPosId: string;
+    posExternalId: string;
+    storeExternalId: string;
+    name: string;
+  };
 }

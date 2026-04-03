@@ -13,6 +13,8 @@ dist-ssr
 .vite
 *.local
 .env
+development.env
+production.env
 .env.*
 
 # Editor directories and files
