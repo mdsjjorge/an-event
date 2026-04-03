@@ -18,51 +18,59 @@ export const defaultEvent = {
 
 export const defaultGifts = [
   {
-    name: "Liquidificador",
-    description:
-      "Liquidificador inox de alta potencia, perfeito para o dia a dia na cozinha.",
-    price: 189.9,
-    imageKey: "blender",
+    name: "Microondas",
+    description: "Microondas compacto para aquecer e preparar refeicoes do dia a dia.",
+    price: 689.9,
+    imageUrl:
+      "https://http2.mlstatic.com/D_NQ_NP_2X_871719-MLA99476767400_112025-F.webp",
     sortOrder: 1,
   },
   {
-    name: "Jogo de Cama",
-    description:
-      "Jogo de cama queen 400 fios, macio e elegante em algodao egipcio.",
-    price: 299.9,
-    imageKey: "bedset",
+    name: "Parafuradeira",
+    description: "Parafuradeira pratica para pequenos reparos e montagens em casa.",
+    price: 329.9,
+    imageUrl:
+      "https://http2.mlstatic.com/D_NQ_NP_2X_846133-MLB98971529123_112025-F.webp",
     sortOrder: 2,
   },
   {
-    name: "Air Fryer",
-    description:
-      "Fritadeira eletrica sem oleo 4.2L, ideal para receitas saudaveis.",
-    price: 449.9,
-    imageKey: "airfryer",
+    name: "Mesa",
+    description: "Mesa versatil para compor a sala de jantar ou area gourmet.",
+    price: 799.9,
+    imageUrl:
+      "https://http2.mlstatic.com/D_NQ_NP_2X_701687-MLB107944272794_032026-F.webp",
     sortOrder: 3,
   },
   {
-    name: "Cafeteira",
-    description:
-      "Cafeteira eletrica programavel com jarra de vidro e filtro permanente.",
-    price: 259.9,
-    imageKey: "coffeemaker",
+    name: "Air Fryer",
+    description: "Air fryer ideal para receitas rapidas e praticas no dia a dia.",
+    price: 459.9,
+    imageUrl:
+      "https://http2.mlstatic.com/D_NQ_NP_2X_813389-MLA99520090726_112025-F.webp",
     sortOrder: 4,
   },
   {
-    name: "Jogo de Pratos",
-    description:
-      "Aparelho de jantar em porcelana com 20 pecas, design classico.",
-    price: 349.9,
-    imageKey: "plates",
+    name: "Datashow",
+    description: "Projetor para reunioes, filmes e momentos especiais em casa.",
+    price: 1899.9,
+    imageUrl:
+      "https://http2.mlstatic.com/D_NQ_NP_2X_828936-MLB88748640584_082025-F.webp",
     sortOrder: 5,
   },
   {
-    name: "Aspirador Robo",
-    description:
-      "Aspirador robo inteligente com mapeamento e controle via app.",
-    price: 899.9,
-    imageKey: "vacuum",
+    name: "Panela de Pressao",
+    description: "Panela de pressao resistente para preparar receitas com mais agilidade.",
+    price: 239.9,
+    imageUrl:
+      "https://http2.mlstatic.com/D_NQ_NP_2X_934016-MLA106965378420_022026-F.webp",
     sortOrder: 6,
+  },
+  {
+    name: "Boombox",
+    description: "Caixa de som portatil para animar encontros e celebracoes.",
+    price: 549.9,
+    imageUrl:
+      "https://http2.mlstatic.com/D_NQ_NP_2X_682250-MLA99395859458_112025-F.webp",
+    sortOrder: 7,
   },
 ];

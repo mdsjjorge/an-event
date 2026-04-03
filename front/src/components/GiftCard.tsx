@@ -1,6 +1,5 @@
 import { Check } from "lucide-react";
 import type { GiftItem } from "@/types/api";
-import { giftImages } from "@/lib/giftImages";
 
 interface GiftCardProps {
   item: GiftItem;
@@ -9,8 +8,6 @@ interface GiftCardProps {
 }
 
 const GiftCard = ({ item, selected, onSelect }: GiftCardProps) => {
-  const imageSrc = giftImages[item.imageKey];
-
   return (
     <button
       onClick={() => onSelect(item)}
@@ -25,7 +22,7 @@ const GiftCard = ({ item, selected, onSelect }: GiftCardProps) => {
       )}
       <div className="aspect-square overflow-hidden bg-secondary">
         <img
-          src={imageSrc}
+          src={item.imageUrl}
           alt={item.name}
           loading="lazy"
           width={512}

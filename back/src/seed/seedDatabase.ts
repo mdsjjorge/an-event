@@ -14,5 +14,27 @@ export const seedDatabase = async () => {
 
   if (giftCount === 0) {
     await GiftModel.insertMany(defaultGifts);
+    return;
+  }
+
+  for (const gift of defaultGifts) {
+    await GiftModel.updateMany(
+      {
+        name: gift.name,
+        $or: [{ imageUrl: { $exists: false } }, { imageUrl: "" }],
+      },
+      {
+        $set: {
+          description: gift.description,
+          price: gift.price,
+          imageUrl: gift.imageUrl,
+          sortOrder: gift.sortOrder,
+          active: true,
+        },
+        $unset: {
+          imageKey: "",
+        },
+      }
+    );
   }
 };

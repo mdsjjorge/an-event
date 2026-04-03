@@ -18,7 +18,7 @@ export interface GiftItem {
   name: string;
   description: string;
   price: number;
-  imageKey: string;
+  imageUrl: string;
 }
 
 export interface RsvpPayload {

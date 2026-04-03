@@ -10,6 +10,7 @@ Estrutura separada em duas pastas:
 - `GET /api/health`
 - `GET /api/event`
 - `GET /api/gifts`
+- `POST /api/gifts`
 - `GET /api/rsvps`
 - `POST /api/rsvps`
 
@@ -18,8 +19,6 @@ Estrutura separada em duas pastas:
 ```bash
 docker compose up -d
 ```
-
-Observacao: o compose usa `mongo:7.0`, porque o MongoDB oficial nao oferece imagem Alpine estavel para esse fluxo.
 
 ## Como rodar o backend
 
