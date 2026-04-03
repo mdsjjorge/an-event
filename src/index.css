@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lato:wght@300;400;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+  :root {
+    --background: 30 25% 97%;
+    --foreground: 220 20% 18%;
+
+    --card: 30 20% 99%;
+    --card-foreground: 220 20% 18%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 18%;
+
+    --primary: 152 45% 38%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 30 20% 93%;
+    --secondary-foreground: 220 20% 18%;
+
+    --muted: 30 15% 94%;
+    --muted-foreground: 220 10% 50%;
+
+    --accent: 30 40% 90%;
+    --accent-foreground: 220 20% 18%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 30 15% 88%;
+    --input: 30 15% 88%;
+    --ring: 152 45% 38%;
+
+    --radius: 0.75rem;
+
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Lato', sans-serif;
+
+    --hero-overlay: linear-gradient(180deg, hsla(220, 20%, 10%, 0.3) 0%, hsla(220, 20%, 10%, 0.6) 100%);
+    --shadow-card: 0 4px 24px -4px hsla(220, 20%, 18%, 0.08);
+    --shadow-elevated: 0 12px 40px -8px hsla(220, 20%, 18%, 0.12);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+}
