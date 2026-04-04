@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CalendarHeart, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,8 +11,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { createRsvp } from "@/lib/api";
-import type { EventContent } from "@/types/api";
+import { createRsvp, getPaymentAccessStatus } from "@/lib/api";
+import type { EventContent, PaymentAccessStatus } from "@/types/api";
+
+const PAYMENT_ACCESS_TOKEN_KEY = "an-event-payment-access-token";
 
 interface RsvpSectionProps {
   event: EventContent;
@@ -23,6 +25,76 @@ const RsvpSection = ({ event }: RsvpSectionProps) => {
   const [guests, setGuests] = useState("");
   const [confirmed, setConfirmed] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [accessToken, setAccessToken] = useState("");
+  const [paymentStatus, setPaymentStatus] = useState<PaymentAccessStatus | null>(
+    null
+  );
+  const [isCheckingPayment, setIsCheckingPayment] = useState(true);
+
+  useEffect(() => {
+    const syncAccessToken = () => {
+      const nextToken = localStorage.getItem(PAYMENT_ACCESS_TOKEN_KEY) ?? "";
+      setAccessToken(nextToken);
+    };
+
+    syncAccessToken();
+    window.addEventListener("payment-access-updated", syncAccessToken);
+
+    return () => {
+      window.removeEventListener("payment-access-updated", syncAccessToken);
+    };
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    let intervalId: number | null = null;
+
+    const checkStatus = async () => {
+      if (!accessToken) {
+        if (isMounted) {
+          setPaymentStatus(null);
+          setIsCheckingPayment(false);
+        }
+        return;
+      }
+
+      try {
+        const response = await getPaymentAccessStatus(accessToken);
+
+        if (!isMounted) {
+          return;
+        }
+
+        setPaymentStatus(response);
+        setIsCheckingPayment(false);
+
+        if (response.authorized && intervalId) {
+          window.clearInterval(intervalId);
+        }
+      } catch {
+        if (isMounted) {
+          setIsCheckingPayment(false);
+        }
+      }
+    };
+
+    setIsCheckingPayment(true);
+    void checkStatus();
+
+    if (accessToken) {
+      intervalId = window.setInterval(() => {
+        void checkStatus();
+      }, 5000);
+    }
+
+    return () => {
+      isMounted = false;
+
+      if (intervalId) {
+        window.clearInterval(intervalId);
+      }
+    };
+  }, [accessToken]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,10 +103,19 @@ const RsvpSection = ({ event }: RsvpSectionProps) => {
       return;
     }
 
+    if (!paymentStatus?.authorized || !accessToken) {
+      toast.error("O RSVP sera liberado quando o pagamento Pix for aprovado.");
+      return;
+    }
+
     try {
       setIsSubmitting(true);
       const guestsCount = guests ? Number(guests) : 0;
-      const response = await createRsvp({ name, guests: guestsCount });
+      const response = await createRsvp({
+        name,
+        guests: guestsCount,
+        accessToken,
+      });
       setConfirmed(true);
       toast.success(response.message);
     } catch (error) {
@@ -58,6 +139,15 @@ const RsvpSection = ({ event }: RsvpSectionProps) => {
           </h2>
           <p className="font-body text-muted-foreground">
             {event.rsvpDescription}
+          </p>
+          <p className="font-body text-sm text-muted-foreground mt-3">
+            {!accessToken
+              ? "Primeiro realize o pagamento do Pix na lista de presentes para liberar a confirmacao."
+              : isCheckingPayment
+                ? "Consultando o status do pagamento..."
+                : paymentStatus?.authorized
+                  ? "Pagamento aprovado. Agora voce pode confirmar presenca."
+                  : "Pagamento ainda nao aprovado. Esta tela verifica automaticamente quando o webhook chegar."}
           </p>
         </div>
 
@@ -107,11 +197,15 @@ const RsvpSection = ({ event }: RsvpSectionProps) => {
             <Button
               type="submit"
               size="lg"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !paymentStatus?.authorized}
               className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-body text-base py-6 rounded-full gap-2"
             >
               <Send className="w-5 h-5" />
-              {isSubmitting ? "Enviando..." : "Confirmar Presenca"}
+              {isSubmitting
+                ? "Enviando..."
+                : paymentStatus?.authorized
+                  ? "Confirmar Presenca"
+                  : "Aguardando pagamento Pix"}
             </Button>
           </form>
         )}

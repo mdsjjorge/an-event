@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { z } from "zod";
+import { markRsvpAsUsed } from "../lib/mercadoPagoWebhook.js";
 import { RsvpModel } from "../models/Rsvp.js";
 
 export const rsvpRouter = Router();
@@ -7,6 +8,7 @@ export const rsvpRouter = Router();
 const rsvpSchema = z.object({
   name: z.string().trim().min(1, "Por favor, informe seu nome."),
   guests: z.coerce.number().int().min(0).max(3),
+  accessToken: z.string().trim().min(1, "Pagamento nao vinculado."),
 });
 
 rsvpRouter.get("/", async (_req, res) => {
@@ -31,7 +33,19 @@ rsvpRouter.post("/", async (req, res) => {
     });
   }
 
-  const rsvp = await RsvpModel.create(parsed.data);
+  const authorizedPayment = await markRsvpAsUsed(parsed.data.accessToken);
+
+  if (!authorizedPayment) {
+    return res.status(403).json({
+      message:
+        "A confirmacao de presenca so e liberada apos a aprovacao do pagamento Pix.",
+    });
+  }
+
+  const rsvp = await RsvpModel.create({
+    name: parsed.data.name,
+    guests: parsed.data.guests,
+  });
 
   return res.status(201).json({
     message: "Presenca confirmada com sucesso.",

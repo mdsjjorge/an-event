@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
+import { CheckCircle2, LoaderCircle } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -8,8 +9,10 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { createPixPayment } from "@/lib/api";
-import type { GiftItem } from "@/types/api";
+import { createPixPayment, getPaymentAccessStatus } from "@/lib/api";
+import type { GiftItem, PaymentAccessStatus } from "@/types/api";
+
+const PAYMENT_ACCESS_TOKEN_KEY = "an-event-payment-access-token";
 
 interface QrCodeModalProps {
   open: boolean;
@@ -27,6 +30,7 @@ const QrCodeModal = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pixData, setPixData] = useState<{
+    accessToken: string;
     qrMode: "static" | "dynamic" | "hybrid";
     qrData: string | null;
     usesStaticPosQr: boolean;
@@ -34,16 +38,74 @@ const QrCodeModal = ({
     instructions: string;
     ticketUrl: string | null;
   } | null>(null);
+  const [paymentStatus, setPaymentStatus] = useState<PaymentAccessStatus | null>(
+    null
+  );
+  const [hasAnnouncedApproval, setHasAnnouncedApproval] = useState(false);
 
   useEffect(() => {
     if (!open) {
       setIsLoading(false);
       setError(null);
       setPixData(null);
+      setPaymentStatus(null);
+      setHasAnnouncedApproval(false);
     }
   }, [open]);
 
+  useEffect(() => {
+    if (!open || !pixData?.accessToken) {
+      return;
+    }
+
+    let isMounted = true;
+    let intervalId: number | null = null;
+
+    const checkStatus = async () => {
+      try {
+        const response = await getPaymentAccessStatus(pixData.accessToken);
+
+        if (!isMounted) {
+          return;
+        }
+
+        setPaymentStatus(response);
+        window.dispatchEvent(new Event("payment-access-updated"));
+
+        if (response.authorized && !hasAnnouncedApproval) {
+          setHasAnnouncedApproval(true);
+        }
+
+        if (response.authorized && intervalId) {
+          window.clearInterval(intervalId);
+        }
+      } catch {
+        if (isMounted) {
+          setPaymentStatus(null);
+        }
+      }
+    };
+
+    void checkStatus();
+    intervalId = window.setInterval(() => {
+      void checkStatus();
+    }, 3000);
+
+    return () => {
+      isMounted = false;
+
+      if (intervalId) {
+        window.clearInterval(intervalId);
+      }
+    };
+  }, [hasAnnouncedApproval, open, pixData?.accessToken]);
+
   if (!item) return null;
+
+  const handleGoToRsvp = () => {
+    onClose();
+    document.getElementById("rsvp")?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const handleGeneratePix = async () => {
     try {
@@ -54,6 +116,8 @@ const QrCodeModal = ({
         giftId: item.id,
       });
 
+      localStorage.setItem(PAYMENT_ACCESS_TOKEN_KEY, response.accessToken);
+      window.dispatchEvent(new Event("payment-access-updated"));
       setPixData(response);
     } catch (requestError) {
       setError(
@@ -95,6 +159,31 @@ const QrCodeModal = ({
               <p className="font-body text-sm text-muted-foreground text-center">
                 {pixData.instructions}
               </p>
+              {paymentStatus?.authorized ? (
+                <div className="w-full rounded-lg border border-primary/30 bg-primary/10 p-4 text-center">
+                  <CheckCircle2 className="mx-auto mb-2 h-8 w-8 text-primary" />
+                  <p className="font-body text-sm font-semibold text-foreground">
+                    Pagamento recebido com sucesso.
+                  </p>
+                  <p className="font-body text-sm text-muted-foreground">
+                    O botao de confirmar presenca ja foi liberado abaixo na pagina.
+                  </p>
+                  <Button
+                    type="button"
+                    className="mt-4 w-full"
+                    onClick={handleGoToRsvp}
+                  >
+                    Ir para confirmar presenca
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-background/60 p-3">
+                  <LoaderCircle className="h-4 w-4 animate-spin text-muted-foreground" />
+                  <p className="font-body text-sm text-muted-foreground">
+                    Aguardando confirmacao do pagamento pelo webhook...
+                  </p>
+                </div>
+              )}
               {pixData.usesStaticPosQr && !pixData.staticQrConfigured ? (
                 <p className="font-body text-sm text-destructive text-center">
                   Configure `MP_STATIC_QR_DATA` no backend com o QR do caixa para exibir o QR estatico aqui.
@@ -138,7 +227,7 @@ const QrCodeModal = ({
             </p>
           </div>
           <p className="font-body text-xs text-muted-foreground text-center max-w-xs">
-            Apos o pagamento, envie o comprovante pelo WhatsApp para confirmarmos o presente: {supportPhone}
+            Assim que o Mercado Pago confirmar o pagamento via webhook, a confirmacao de presenca sera liberada automaticamente. Se precisar de ajuda, fale no WhatsApp: {supportPhone}
           </p>
         </div>
       </DialogContent>

@@ -22,6 +22,7 @@ export interface GiftItem {
 export interface RsvpPayload {
   name: string;
   guests: number;
+  accessToken: string;
 }
 
 export interface PixPaymentPayload {
@@ -32,6 +33,7 @@ export interface PixPaymentResponse {
   id: string;
   externalReference: string;
   idempotencyKey: string;
+  accessToken: string;
   status: string;
   statusDetail: string;
   totalAmount: string;
@@ -55,4 +57,13 @@ export interface PixPaymentResponse {
     storeExternalId: string;
     name: string;
   };
+}
+
+export interface PaymentAccessStatus {
+  authorized: boolean;
+  status: string;
+  statusDetail: string;
+  amount: string;
+  paidAt: string | null;
+  rsvpSubmittedAt: string | null;
 }

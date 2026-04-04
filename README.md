@@ -12,6 +12,8 @@ Estrutura separada em duas pastas:
 - `GET /api/gifts`
 - `POST /api/gifts`
 - `POST /api/payments/pix`
+- `GET /api/payments/access/:accessToken`
+- `POST /api/payments/webhooks/mercado-pago`
 - `GET /api/rsvps`
 - `POST /api/rsvps`
 
@@ -55,7 +57,7 @@ MP_STORE_NAME=An event
 5. Se quiser receber notificacoes do Mercado Pago, preencha tambem:
 
 ```bash
-PIX_NOTIFICATION_URL=https://seu-endpoint-publico/webhooks/mercado-pago
+PIX_NOTIFICATION_URL=https://seu-endpoint-publico/api/payments/webhooks/mercado-pago
 ```
 
 6. Reinicie o backend para aplicar as variaveis.
@@ -63,6 +65,7 @@ PIX_NOTIFICATION_URL=https://seu-endpoint-publico/webhooks/mercado-pago
 Observacoes:
 
 - O fluxo atual cria `orders` QR dinamicas em `/v1/orders`, seguindo a documentacao oficial de QR presencial.
+- Quando o Mercado Pago confirma o pagamento via webhook, o backend libera o RSVP vinculado ao `accessToken` retornado na criacao do Pix.
 - Os campos monetarios enviados ao Mercado Pago saem como `string`: `total_amount`, `items.unit_price` e `transactions.payments.amount`.
 - A idempotencia e gerada dinamicamente por operacao com prefixo do projeto, id do gift, valor e referencia externa.
 - O frontend nao precisa da public key para esse fluxo atual, porque a geracao da order acontece no backend.

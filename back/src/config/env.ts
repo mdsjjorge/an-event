@@ -25,4 +25,11 @@ const envSchema = z.object({
   MP_STORE_NAME: z.string().min(1),
 });
 
-export const env = envSchema.parse(process.env);
+const parsedEnv = envSchema.parse(process.env);
+
+export const env = {
+  ...parsedEnv,
+  CLIENT_URLS: parsedEnv.CLIENT_URL.split(",")
+    .map((value) => value.trim())
+    .filter(Boolean),
+};

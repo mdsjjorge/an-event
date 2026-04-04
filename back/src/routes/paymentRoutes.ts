@@ -4,10 +4,15 @@ import { Router } from "express";
 import { z } from "zod";
 import { env } from "../config/env.js";
 import { GiftModel } from "../models/Gift.js";
+import { PaymentSessionModel } from "../models/PaymentSession.js";
 import {
   buildProjectIdempotencyKey,
   formatAmountString,
 } from "../lib/mercadoPago.js";
+import {
+  getPaymentAccessStatus,
+  processMercadoPagoWebhook,
+} from "../lib/mercadoPagoWebhook.js";
 
 const createPixOrderSchema = z.object({
   giftId: z.string().trim().min(1, "giftId e obrigatorio."),
@@ -47,6 +52,9 @@ paymentRouter.post("/pix", async (req, res) => {
     total_amount: amount,
     description,
     external_reference: externalReference,
+    // ...(env.PIX_NOTIFICATION_URL
+    //   ? { notification_url: env.PIX_NOTIFICATION_URL }
+    //   : {}),
     config: {
       qr: {
         external_pos_id: env.MP_POS_EXTERNAL_ID,
@@ -77,7 +85,7 @@ paymentRouter.post("/pix", async (req, res) => {
     "X-Idempotency-Key": idempotencyKey,
   };
 
-  // console.log("🚀 ~ ~ orderPayload:", JSON.stringify(orderPayload, null, 2));
+  console.log("🚀 ~ ~ orderPayload:", JSON.stringify(orderPayload, null, 2));
   // console.log("🚀 ~ ~ headers:", JSON.stringify(headers, null, 2));
 
   try {
@@ -131,10 +139,26 @@ paymentRouter.post("/pix", async (req, res) => {
       });
     }
 
+    const orderId = String(data?.id ?? randomUUID());
+    const accessToken = randomUUID();
+
+    await PaymentSessionModel.create({
+      giftId: gift._id,
+      orderId,
+      paymentId: String(payment.id ?? "") || null,
+      externalReference,
+      accessToken,
+      amount: String(payment.amount ?? amount),
+      status: String(payment.status ?? "pending"),
+      statusDetail: String(payment.status_detail ?? ""),
+      attendanceUnlocked: false,
+    });
+
     return res.status(201).json({
-      id: String(data?.id ?? randomUUID()),
+      id: orderId,
       externalReference,
       idempotencyKey,
+      accessToken,
       status: String(data?.status ?? ""),
       statusDetail: String(data?.status_detail ?? ""),
       totalAmount: String(data?.total_amount ?? amount),
@@ -166,6 +190,36 @@ paymentRouter.post("/pix", async (req, res) => {
 
     return res.status(502).json({
       message: "Falha de comunicacao com o Mercado Pago.",
+    });
+  }
+});
+
+paymentRouter.get("/access/:accessToken", async (req, res) => {
+  const status = await getPaymentAccessStatus(req.params.accessToken);
+
+  if (!status) {
+    return res.status(404).json({
+      message: "Sessao de pagamento nao encontrada.",
+    });
+  }
+
+  return res.json(status);
+});
+
+paymentRouter.post("/webhooks/mercado-pago", async (req, res) => {
+  try {
+    await processMercadoPagoWebhook({
+      body: (req.body ?? {}) as Record<string, unknown>,
+      query: req.query as Record<string, unknown>,
+      headers: req.headers as Record<string, unknown>,
+    });
+
+    return res.status(200).json({ received: true });
+  } catch (error) {
+    console.error("Erro ao processar webhook do Mercado Pago", error);
+
+    return res.status(500).json({
+      message: "Falha ao processar webhook do Mercado Pago.",
     });
   }
 });

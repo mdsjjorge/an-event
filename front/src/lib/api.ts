@@ -1,6 +1,7 @@
 import type {
   EventContent,
   GiftItem,
+  PaymentAccessStatus,
   PixPaymentPayload,
   PixPaymentResponse,
   RsvpPayload,
@@ -43,3 +44,6 @@ export const createPixPayment = (payload: PixPaymentPayload) =>
     method: "POST",
     body: JSON.stringify(payload),
   });
+
+export const getPaymentAccessStatus = (accessToken: string) =>
+  request<PaymentAccessStatus>(`/payments/access/${accessToken}`);
