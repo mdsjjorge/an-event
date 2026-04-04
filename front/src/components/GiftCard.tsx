@@ -1,25 +1,15 @@
-import { Check } from "lucide-react";
+import { Gift } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import type { GiftItem } from "@/types/api";
 
 interface GiftCardProps {
   item: GiftItem;
-  selected: boolean;
-  onSelect: (item: GiftItem) => void;
+  onGift: (item: GiftItem) => void;
 }
 
-const GiftCard = ({ item, selected, onSelect }: GiftCardProps) => {
+const GiftCard = ({ item, onGift }: GiftCardProps) => {
   return (
-    <button
-      onClick={() => onSelect(item)}
-      className={`group relative bg-card rounded-lg overflow-hidden shadow-card hover:shadow-elevated transition-all duration-300 text-left w-full ${
-        selected ? "ring-2 ring-primary" : ""
-      }`}
-    >
-      {selected && (
-        <div className="absolute top-3 right-3 z-10 w-7 h-7 rounded-full bg-primary flex items-center justify-center">
-          <Check className="w-4 h-4 text-primary-foreground" />
-        </div>
-      )}
+    <article className="group overflow-hidden rounded-[1.5rem] border border-border bg-card text-left shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-elevated">
       <div className="aspect-square overflow-hidden bg-secondary">
         <img
           src={item.imageUrl}
@@ -30,18 +20,28 @@ const GiftCard = ({ item, selected, onSelect }: GiftCardProps) => {
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
       </div>
-      <div className="p-4">
+      <div className="p-5">
         <h3 className="font-heading text-lg font-semibold text-card-foreground">
           {item.name}
         </h3>
         <p className="font-body text-sm text-muted-foreground mt-1 line-clamp-2">
           {item.description}
         </p>
-        <p className="font-heading text-xl font-bold text-primary mt-3">
-          R$ {item.price.toFixed(2).replace(".", ",")}
-        </p>
+        <div className="mt-5 flex items-center justify-between gap-4">
+          <p className="font-heading text-xl font-bold text-primary">
+            R$ {item.price.toFixed(2).replace(".", ",")}
+          </p>
+          <Button
+            type="button"
+            className="rounded-full px-5"
+            onClick={() => onGift(item)}
+          >
+            <Gift className="mr-2 h-4 w-4" />
+            Presentear
+          </Button>
+        </div>
       </div>
-    </button>
+    </article>
   );
 };
 

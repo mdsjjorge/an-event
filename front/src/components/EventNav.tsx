@@ -7,7 +7,7 @@ interface EventNavProps {
 const EventNav = ({ title }: EventNavProps) => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
-      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 lg:max-w-[60vw]">
         <a href="#" className="flex items-center gap-2 text-primary">
           <Heart className="w-5 h-5 fill-current" />
           <span className="font-heading text-lg font-semibold text-foreground">

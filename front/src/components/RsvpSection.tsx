@@ -131,7 +131,7 @@ const RsvpSection = ({ event }: RsvpSectionProps) => {
 
   return (
     <section id="rsvp" className="py-20 px-4 bg-secondary">
-      <div className="max-w-lg mx-auto">
+      <div className="mx-auto w-full max-w-lg lg:max-w-[60vw]">
         <div className="text-center mb-10">
           <CalendarHeart className="w-10 h-10 text-primary mx-auto mb-4" />
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-3">
@@ -160,6 +160,28 @@ const RsvpSection = ({ event }: RsvpSectionProps) => {
             <p className="font-body text-muted-foreground">
               Obrigado, <strong className="text-foreground">{name}</strong>! Estamos ansiosos para celebrar com voce.
             </p>
+          </div>
+        ) : !paymentStatus?.authorized ? (
+          <div className="rounded-[1.5rem] border border-border bg-card p-8 text-center shadow-card">
+            <CalendarHeart className="mx-auto mb-4 h-12 w-12 text-primary" />
+            <h3 className="font-heading text-2xl font-bold text-foreground">
+              Confirmacao liberada apos o Pix
+            </h3>
+            <p className="mt-3 font-body text-muted-foreground">
+              Assim que o pagamento do presente for aprovado, esta area sera liberada automaticamente para voce confirmar sua presenca.
+            </p>
+            <Button
+              type="button"
+              variant="outline"
+              className="mt-6 rounded-full"
+              onClick={() =>
+                document
+                  .getElementById("lista")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
+            >
+              Voltar para a lista de presentes
+            </Button>
           </div>
         ) : (
           <form

@@ -55,9 +55,11 @@ const Index = () => {
       <GiftList items={gifts} event={event} />
       <RsvpSection event={event} />
       <footer className="py-8 text-center border-t border-border">
-        <p className="font-body text-sm text-muted-foreground flex items-center justify-center gap-1">
-          {event.footerText} <Heart className="w-4 h-4 text-primary fill-current" />
-        </p>
+        <div className="mx-auto w-full max-w-6xl px-4 lg:max-w-[60vw]">
+          <p className="font-body text-sm text-muted-foreground flex items-center justify-center gap-1">
+            {event.footerText} <Heart className="w-4 h-4 text-primary fill-current" />
+          </p>
+        </div>
       </footer>
     </div>
   );
