@@ -177,6 +177,11 @@ const upsertPaymentStatus = async (params: {
     return null;
   }
 
+  const shouldAppendApprovalLog =
+    attendanceUnlocked &&
+    !session.attendanceUnlocked &&
+    !session.timeline?.some((entry) => entry.type === "payment_approved");
+
   if (params.paymentId) {
     session.paymentId = params.paymentId;
   }
@@ -187,6 +192,22 @@ const upsertPaymentStatus = async (params: {
   session.attendanceUnlocked = attendanceUnlocked;
   session.paidAt = paidAt ?? session.paidAt;
   session.lastWebhookAt = new Date();
+
+  if (shouldAppendApprovalLog) {
+    session.timeline.push({
+      type: "payment_approved",
+      createdAt: paidAt ?? new Date(),
+      payload: {
+        orderId: params.orderId ?? session.orderId,
+        paymentId: params.paymentId ?? session.paymentId,
+        externalReference: params.externalReference ?? session.externalReference,
+        amount: String(params.amount ?? session.amount),
+        status,
+        statusDetail,
+        action: params.action ?? null,
+      },
+    });
+  }
 
   await session.save();
 
@@ -240,12 +261,16 @@ const processEmbeddedOrderNotification = async (input: NotificationInput) => {
         ? bodyData.external_reference
         : null,
     amount:
-      payment?.paid_amount ??
-      payment?.amount ??
-      (typeof bodyData.total_paid_amount === "string" ||
-      typeof bodyData.total_paid_amount === "number"
-        ? bodyData.total_paid_amount
-        : null),
+      typeof payment?.paid_amount === "string" ||
+      typeof payment?.paid_amount === "number"
+        ? payment.paid_amount
+        : typeof payment?.amount === "string" ||
+            typeof payment?.amount === "number"
+          ? payment.amount
+          : typeof bodyData.total_paid_amount === "string" ||
+              typeof bodyData.total_paid_amount === "number"
+            ? bodyData.total_paid_amount
+            : null,
     status:
       typeof payment?.status === "string"
         ? payment.status

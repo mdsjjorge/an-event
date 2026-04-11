@@ -25,6 +25,13 @@ export interface RsvpPayload {
   accessToken: string;
 }
 
+export interface RsvpItem {
+  id: string;
+  name: string;
+  guests: number;
+  createdAt: string;
+}
+
 export interface PixPaymentPayload {
   giftId: string;
 }

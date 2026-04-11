@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import { CheckCircle2, LoaderCircle } from "lucide-react";
+import { CheckCircle2, Copy, LoaderCircle } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { createPixPayment, getPaymentAccessStatus } from "@/lib/api";
 import type { GiftItem, PaymentAccessStatus } from "@/types/api";
+import { toast } from "sonner";
 
 const PAYMENT_ACCESS_TOKEN_KEY = "an-event-payment-access-token";
 
@@ -42,6 +43,26 @@ const QrCodeModal = ({
     null
   );
   const [hasAnnouncedApproval, setHasAnnouncedApproval] = useState(false);
+
+  const amountReaction = (() => {
+    if (!item) {
+      return "";
+    }
+
+    if (item.price < 20) {
+      return "Abaixo de R$ 20 e com coragem de olhar no espelho. Isso nao e contribuicao, e uma assinatura premium do clube dos pao-duro.";
+    }
+
+    if (item.price < 50) {
+      return "Entre R$ 20 e R$ 49,99: o famoso gesto de carinho com freio de mao puxado. Nao chega a ser mesquinharia, mas flerta perigosamente.";
+    }
+
+    if (item.price > 200) {
+      return "Acima de R$ 200 voce nao e convidado, e patrocinador oficial da nossa saga. Estamos a um passo de erguer um busto seu na sala.";
+    }
+
+    return "Valor equilibrado: nem mao de vaca, nem personagem bilionario. Um cidadao funcional contribuindo para a historia.";
+  })();
 
   useEffect(() => {
     if (!open) {
@@ -130,6 +151,19 @@ const QrCodeModal = ({
     }
   };
 
+  const handleCopyPix = async () => {
+    if (!pixData?.qrData) {
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(pixData.qrData);
+      toast.success("Pix copia e cola copiado para a area de transferencia.");
+    } catch {
+      toast.error("Nao foi possivel copiar o codigo Pix.");
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md bg-card">
@@ -159,6 +193,20 @@ const QrCodeModal = ({
               <p className="font-body text-sm text-muted-foreground text-center">
                 {pixData.instructions}
               </p>
+              {pixData.qrData ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  onClick={handleCopyPix}
+                >
+                  <Copy className="mr-2 h-4 w-4" />
+                  Copiar Pix copia e cola
+                </Button>
+              ) : null}
+              <div className="w-full rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-center text-amber-950">
+                <p className="font-body text-sm">{amountReaction}</p>
+              </div>
               {paymentStatus?.authorized ? (
                 <div className="w-full rounded-lg border border-primary/30 bg-primary/10 p-4 text-center">
                   <CheckCircle2 className="mx-auto mb-2 h-8 w-8 text-primary" />
@@ -203,7 +251,8 @@ const QrCodeModal = ({
           ) : (
             <div className="w-full space-y-4">
               <p className="font-body text-sm text-muted-foreground text-center">
-                Gere uma order Pix no Mercado Pago para este presente.
+                Gere uma order Pix no Mercado Pago para este presente e desbloqueie
+                sua participacao oficial nesse marco da ascensao domestica.
               </p>
               {error ? (
                 <p className="font-body text-sm text-destructive">{error}</p>

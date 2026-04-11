@@ -152,6 +152,20 @@ paymentRouter.post("/pix", async (req, res) => {
       status: String(payment.status ?? "pending"),
       statusDetail: String(payment.status_detail ?? ""),
       attendanceUnlocked: false,
+      timeline: [
+        {
+          type: "qr_generated",
+          createdAt: new Date(),
+          payload: {
+            giftId: String(gift._id),
+            giftName: gift.name,
+            amount,
+            orderId,
+            paymentId: String(payment.id ?? "") || null,
+            qrMode: env.MP_QR_MODE,
+          },
+        },
+      ],
     });
 
     return res.status(201).json({

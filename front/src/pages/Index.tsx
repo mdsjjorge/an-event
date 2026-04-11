@@ -4,7 +4,7 @@ import GiftList from "@/components/GiftList";
 import RsvpSection from "@/components/RsvpSection";
 import { Heart } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { getEventContent, getGiftItems } from "@/lib/api";
+import { getEventContent, getGiftItems, getRsvps } from "@/lib/api";
 
 const Index = () => {
   const {
@@ -25,7 +25,17 @@ const Index = () => {
     queryFn: getGiftItems,
   });
 
-  if (isLoadingEvent || isLoadingGifts) {
+  const {
+    data: rsvps = [],
+    isLoading: isLoadingRsvps,
+    error: rsvpsError,
+  } = useQuery({
+    queryKey: ["rsvps"],
+    queryFn: getRsvps,
+    refetchInterval: 15000,
+  });
+
+  if (isLoadingEvent || isLoadingGifts || isLoadingRsvps) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center px-4">
         <p className="font-body text-muted-foreground">
@@ -35,7 +45,7 @@ const Index = () => {
     );
   }
 
-  if (eventError || giftsError || !event) {
+  if (eventError || giftsError || rsvpsError || !event) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center px-4">
         <p className="font-body text-center text-muted-foreground max-w-md">
@@ -52,7 +62,7 @@ const Index = () => {
         eventTitle={event.eventTitle}
         eventSubtitle={event.eventSubtitle}
       />
-      <GiftList items={gifts} event={event} />
+      <GiftList items={gifts} event={event} rsvps={rsvps} />
       <RsvpSection event={event} />
       <footer className="py-8 text-center border-t border-border">
         <div className="mx-auto w-full max-w-6xl px-4 lg:max-w-[60vw]">

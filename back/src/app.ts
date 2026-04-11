@@ -10,15 +10,28 @@ import { webhookRouter } from "./routes/webhookRoutes.js";
 
 export const app = express();
 
+const normalizeOrigin = (value: string) => value.trim().replace(/\/+$/, "");
+const isAllowedOrigin = (origin: string) =>
+  env.CLIENT_URLS.includes(origin) ||
+  env.CLIENT_URL_PATTERNS_REGEX.some((pattern) => pattern.test(origin));
+
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || env.CLIENT_URLS.includes(origin)) {
+      const normalizedOrigin = origin ? normalizeOrigin(origin) : origin;
+
+      if (!normalizedOrigin || isAllowedOrigin(normalizedOrigin)) {
         callback(null, true);
         return;
       }
 
-      callback(new Error("Origin nao permitida pelo CORS."));
+      const allowedOrigins = [...env.CLIENT_URLS, ...env.CLIENT_URL_PATTERN_LIST];
+
+      callback(
+        new Error(
+          `Origin nao permitida pelo CORS: ${normalizedOrigin}. Permitidas: ${allowedOrigins.join(", ")}`,
+        ),
+      );
     },
   }),
 );

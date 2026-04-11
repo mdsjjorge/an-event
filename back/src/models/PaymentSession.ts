@@ -24,6 +24,19 @@ const paymentSessionSchema = new Schema(
     paidAt: { type: Date, default: null },
     lastWebhookAt: { type: Date, default: null },
     rsvpSubmittedAt: { type: Date, default: null },
+    timeline: {
+      type: [
+        new Schema(
+          {
+            type: { type: String, required: true },
+            createdAt: { type: Date, required: true, default: Date.now },
+            payload: { type: Schema.Types.Mixed, default: null },
+          },
+          { _id: false }
+        ),
+      ],
+      default: [],
+    },
   },
   { timestamps: true }
 );

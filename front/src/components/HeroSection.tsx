@@ -40,10 +40,10 @@ const HeroSection = ({ eventTitle, eventSubtitle }: HeroSectionProps) => {
               />
               <div className="absolute inset-x-0 bottom-0 p-6 text-primary-foreground">
                 <p className="font-body text-sm uppercase tracking-[0.28em] text-primary-foreground/80">
-                  Casa nova
+                  Projeto luxo raiz
                 </p>
                 <p className="mt-2 font-heading text-3xl font-semibold">
-                  Um novo comeco para compartilhar.
+                  Um monumento a superacao com acabamento de humilde vencedor.
                 </p>
               </div>
             </div>
@@ -60,7 +60,15 @@ const HeroSection = ({ eventTitle, eventSubtitle }: HeroSectionProps) => {
                 {eventSubtitle}
               </p>
               <p className="mt-4 max-w-2xl font-body text-base leading-7 text-muted-foreground">
-                Estamos abrindo as portas do nosso novo lar e queremos dividir esse momento com quem fez parte da nossa caminhada.
+                Venha fazer parte dessa conquista tambem: um espetaculo visual em
+                que a foto entrega palafita premium, mas o discurso promete
+                legado, sucesso, resiliencia e uma trajetoria digna de documentario
+                motivacional patrocinado por parcelamento em 12 vezes.
+              </p>
+              <p className="mt-4 max-w-2xl font-body text-base leading-7 text-muted-foreground">
+                A proposta e simples: voce entra com o carinho, o Pix e o senso
+                de humor; nos entramos com a narrativa grandiosa de quem venceu
+                tudo, inclusive a decoracao provisoria e o reboco emocional.
               </p>
               <div className="mt-8 flex flex-col gap-4 sm:flex-row">
                 <Button
@@ -97,59 +105,19 @@ const HeroSection = ({ eventTitle, eventSubtitle }: HeroSectionProps) => {
               Nossa historia com a casa nova
             </DialogTitle>
             <DialogDescription className="font-body text-base text-muted-foreground">
-              Um resumo carinhoso dessa nova etapa.
+              Um resumo dramaticamente inspirador dessa fase de luxo conceitual.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 font-body text-sm leading-7 text-muted-foreground">
-            <p>Depois de muito tempo sonhando, finalmente chegou o momento de abrir a porta de um lugar que podemos chamar de nosso.</p>
-            <p>Entre plantas rabiscadas, pesquisas de fim de noite e conversas sobre cada detalhe, a ideia da casa nova foi crescendo aos poucos.</p>
-            <p>Antes mesmo das chaves chegarem, ja existia um desejo enorme de construir um espaco leve, acolhedor e cheio de memórias.</p>
-            <p>Foram meses escolhendo o canto da mesa, imaginando a cor das paredes e decidindo como cada ambiente poderia refletir quem somos.</p>
-            <p>Teve expectativa, teve correria e tambem aqueles dias em que parecia que tudo ainda estava longe demais.</p>
-            <p>Mas a cada pequena etapa concluida, a casa deixava de ser projeto e passava a ter cheiro de recomeço.</p>
-            <p>O que mais emociona nessa fase nao e apenas organizar moveis ou abrir caixas.</p>
-            <p>E perceber que cada conquista tem historia, esforco e a presenca de pessoas queridas que caminharam conosco.</p>
-            <p>Esse novo lar nasce como um lugar de encontros simples e sinceros.</p>
-            <p>Um lugar para o cafe passado sem pressa, para as conversas demoradas e para os domingos em volta da mesa.</p>
-            <p>Queremos que a casa tenha vida, risadas e aquela sensacao boa de porta aberta para quem chega com carinho.</p>
-            <p>Mais do que paredes novas, estamos celebrando um ciclo inteiro de amadurecimento e parceria.</p>
-            <p>Cada detalhe foi pensado para representar aconchego.</p>
-            <p>Cada escolha carrega um pouco da nossa personalidade e muito do nosso desejo de receber bem.</p>
-            <p>Temos sonhado com uma rotina mais calma, mais bonita e mais cheia de significado.</p>
-            <p>Sonhamos com jantares improvisados, visitas inesperadas e pequenos rituais que transformam uma casa em lar.</p>
-            <p>Sonhamos com um espaço onde os dias comuns tambem sejam especiais.</p>
-            <p>Ao longo do caminho, aprendemos que construir um lar vai muito alem da estrutura.</p>
-            <p>Envolve cuidado, presenca, intencao e a vontade de criar um refúgio onde o amor possa morar com tranquilidade.</p>
-            <p>Por isso, essa celebracao tem um significado tao especial para nos.</p>
-            <p>Ela marca o inicio de uma fase cheia de gratidão e expectativa boa.</p>
-            <p>Estamos felizes por poder compartilhar esse momento com pessoas que torcem por nos e fazem parte da nossa historia.</p>
-            <p>Cada gesto de carinho ajuda a preencher essa nova casa com afeto desde o primeiro dia.</p>
-            <p>Cada presença reforça o quanto essa conquista fica ainda mais bonita quando dividida.</p>
-            <p>Preparamos tudo com muito cuidado para que esse encontro tenha a nossa cara.</p>
-            <p>Queremos receber voces de forma simples, afetiva e memoravel.</p>
-            <p>Queremos brindar as pequenas vitórias que, somadas, nos trouxeram até aqui.</p>
-            <p>Queremos olhar ao redor e sentir que essa casa ja começa cheia de boas energias.</p>
-            <p>Esse e o tipo de conquista que pede comemoração tranquila, abraços sinceros e muitos desejos bons para o futuro.</p>
-            <p>Nos imaginamos enchendo os ambientes com historias novas, rotinas gostosas e projetos que crescem com o tempo.</p>
-            <p>E nos anima saber que pessoas queridas farão parte das primeiras lembranças desse lugar.</p>
-            <p>Talvez seja isso que mais importa nessa etapa.</p>
-            <p>Transformar uma mudança em celebração.</p>
-            <p>Transformar um endereço novo em ponto de encontro.</p>
-            <p>Transformar um sonho antigo em um presente cheio de vida.</p>
-            <p>Estamos começando com o coração aberto e muita vontade de construir dias felizes por aqui.</p>
-            <p>Com calma, com afeto e com espaço para tudo aquilo que faz sentido para a nossa vida.</p>
-            <p>Se voce chegou ate aqui, ja faz parte dessa historia.</p>
-            <p>E por isso queremos agradecer por acompanhar, incentivar e celebrar conosco.</p>
-            <p>Essa casa nova representa estabilidade, parceria e o prazer de viver uma nova fase com mais profundidade.</p>
-            <p>Representa tambem a beleza dos começos que nascem depois de muito planejamento e paciencia.</p>
-            <p>Que ela seja palco de encontros felizes, noites tranquilas e muitos motivos para agradecer.</p>
-            <p>Que as paredes guardem lembranças leves.</p>
-            <p>Que a cozinha seja cheia de conversa boa.</p>
-            <p>Que a sala receba gente querida.</p>
-            <p>Que cada canto tenha aconchego.</p>
-            <p>Que cada detalhe lembre que valeu a pena esperar.</p>
-            <p>Estamos prontos para viver essa nova etapa.</p>
-            <p>E mais felizes ainda por poder dividi-la com voce.</p>
+            <p>Depois de muito sonhar, pesquisar, recalcular e fingir maturidade financeira, finalmente chegamos ao ponto de chamar um teto de projeto de vida.</p>
+            <p>A foto pode sugerir "simplicidade estrategica", mas preferimos enxergar como uma estetica documental de quem venceu sem perder a dramaticidade.</p>
+            <p>Cada parede dessa jornada foi levantada com esforco, expectativa e aquele classico pensamento: "isso aqui vai virar um lar ou uma licao?"</p>
+            <p>No meio do caminho teve planilha, teve ansiedade, teve otimismo irresponsavel e teve a conviccao de que alguma hora tudo ficaria minimamente apresentavel.</p>
+            <p>Agora chegou a fase mais nobre de toda conquista: convidar pessoas queridas para admirar o resultado e, se possivel, financiar simbolicamente o brilho dessa operacao.</p>
+            <p>Nosso sonho e simples: transformar esse cenario de superacao cenica em um lar funcional, acolhedor e menos dependente da boa vontade dos amigos.</p>
+            <p>Queremos cafe passado, conversa boa, sala cheia e a liberdade de dizer "foi dificil, mas olha como ficou conceitual".</p>
+            <p>Se voce esta lendo isso, ja e parte da plateia VIP dessa grande narrativa de sucesso com toques de improviso e bom humor.</p>
+            <p>Obrigado por acompanhar, rir com a gente e considerar seriamente participar dessa conquista com a ferramenta mais poderosa do afeto moderno: o Pix.</p>
           </div>
         </DialogContent>
       </Dialog>

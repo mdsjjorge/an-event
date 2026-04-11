@@ -8,8 +8,8 @@ const startServer = async () => {
     await connectDatabase();
     await seedDatabase();
 
-    app.listen(env.PORT, () => {
-      console.log(`API running on http://localhost:${env.PORT}`);
+    app.listen(env.PORT, env.HOST, () => {
+      console.log(`API running on http://${env.HOST}:${env.PORT}`);
     });
   } catch (error) {
     console.error("Failed to start API", error);
