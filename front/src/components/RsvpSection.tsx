@@ -147,7 +147,7 @@ const RsvpSection = ({ event }: RsvpSectionProps) => {
                 ? "Consultando o status do pagamento..."
                 : paymentStatus?.authorized
                   ? "Pagamento aprovado. Agora voce pode confirmar presenca."
-                  : "Pagamento ainda nao aprovado. Esta tela verifica automaticamente quando o webhook chegar."}
+                  : "Pagamento ainda nao aprovado. Esta tela verifica automaticamente o pagamento. Para de enrolar e vai escolher um presente pra mim."}
           </p>
         </div>
 
@@ -168,7 +168,7 @@ const RsvpSection = ({ event }: RsvpSectionProps) => {
               Confirmacao liberada apos o Pix
             </h3>
             <p className="mt-3 font-body text-muted-foreground">
-              Assim que o pagamento do presente for aprovado, esta area sera liberada automaticamente para voce confirmar sua presenca.
+              Assim que o pagamento do presente for aprovado, esta area sera liberada automaticamente para voce confirmar sua presenca. Deixa de ser mao de vaca e vai fazer um pix.
             </p>
             <Button
               type="button"

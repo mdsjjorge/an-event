@@ -40,10 +40,10 @@ const HeroSection = ({ eventTitle, eventSubtitle }: HeroSectionProps) => {
               />
               <div className="absolute inset-x-0 bottom-0 p-6 text-primary-foreground">
                 <p className="font-body text-sm uppercase tracking-[0.28em] text-primary-foreground/80">
-                  Projeto luxo raiz
+                  Casa nova
                 </p>
                 <p className="mt-2 font-heading text-3xl font-semibold">
-                  Um monumento a superacao com acabamento de humilde vencedor.
+                  Um novo comeco para compartilhar.
                 </p>
               </div>
             </div>
